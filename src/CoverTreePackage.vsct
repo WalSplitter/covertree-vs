@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable"
+              xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+
+  <Commands package="guidCoverTreePackage">
+    <Groups>
+      <Group guid="guidCoverTreeCmdSet" id="CoverTreeMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidCoverTreeCmdSet" id="cmdRefresh" priority="0x0100" type="Button">
+        <Parent guid="guidCoverTreeCmdSet" id="CoverTreeMenuGroup"/>
+        <Strings>
+          <CommandName>CoverTree.Refresh</CommandName>
+          <ButtonText>CoverTree: Refresh Coverage</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCoverTreeCmdSet" id="cmdNavigateNext" priority="0x0101" type="Button">
+        <Parent guid="guidCoverTreeCmdSet" id="CoverTreeMenuGroup"/>
+        <Strings>
+          <CommandName>CoverTree.NavigateNext</CommandName>
+          <ButtonText>CoverTree: Go to Next Uncovered Line</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidCoverTreeCmdSet" id="cmdNavigatePrev" priority="0x0102" type="Button">
+        <Parent guid="guidCoverTreeCmdSet" id="CoverTreeMenuGroup"/>
+        <Strings>
+          <CommandName>CoverTree.NavigatePrev</CommandName>
+          <ButtonText>CoverTree: Go to Previous Uncovered Line</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <KeyBindings>
+    <KeyBinding guid="guidCoverTreeCmdSet" id="cmdNavigateNext"
+                editor="guidVSStd97" mod1="Alt Shift" key1="N"/>
+    <KeyBinding guid="guidCoverTreeCmdSet" id="cmdNavigatePrev"
+                editor="guidVSStd97" mod1="Alt Shift" key1="P"/>
+  </KeyBindings>
+
+  <Symbols>
+    <GuidSymbol name="guidCoverTreePackage" value="{9F3A7B2C-D4E5-4F1B-A8C6-3E9F2B4D7A1C}"/>
+    <GuidSymbol name="guidCoverTreeCmdSet"  value="{4C8E1F3A-7D2B-4F6A-9B3E-5D1C8F2A4E7B}">
+      <IDSymbol name="CoverTreeMenuGroup" value="0x1020"/>
+      <IDSymbol name="cmdRefresh"         value="0x0100"/>
+      <IDSymbol name="cmdNavigateNext"    value="0x0101"/>
+      <IDSymbol name="cmdNavigatePrev"    value="0x0102"/>
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>

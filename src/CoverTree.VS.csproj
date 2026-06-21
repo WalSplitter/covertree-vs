@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>CoverTree.VS</RootNamespace>
+    <AssemblyName>CoverTree.VS</AssemblyName>
+    <GeneratePkgDefFile>true</GeneratePkgDefFile>
+    <UseCodebase>true</UseCodebase>
+    <DeployExtension>true</DeployExtension>
+    <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- VS SDK — excluded from runtime because VS provides these assemblies -->
+    <PackageReference Include="Microsoft.VisualStudio.SDK"        Version="17.6.36"   ExcludeAssets="runtime"/>
+    <PackageReference Include="Microsoft.VSSDK.BuildTools"        Version="17.6.2153" IncludeAssets="build"/>
+    <!-- JSON parsing — included in output / VSIX -->
+    <PackageReference Include="Newtonsoft.Json"                   Version="13.0.3"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="source.extension.vsixmanifest">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <VSCTCompile Include="CoverTreePackage.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+      <SubType>Designer</SubType>
+    </VSCTCompile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="ToolWindow\CoverTreeControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Update="ToolWindow\CoverTreeControl.xaml.cs">
+      <DependentUpon>CoverTreeControl.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>

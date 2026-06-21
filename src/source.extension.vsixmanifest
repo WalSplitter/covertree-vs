@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0"
+                 xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011"
+                 xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="CoverTree.VS.WalSplitter"
+              Version="1.0.0"
+              Language="en-US"
+              Publisher="WalSplitter"/>
+    <DisplayName>CoverTree</DisplayName>
+    <Description xml:space="preserve">Code coverage visualization for Jest, Vitest, and NYC. Shows per-file coverage in a tree panel and line-level gutter markers.</Description>
+    <Tags>coverage, jest, vitest, nyc, testing, javascript, typescript</Tags>
+    <ProjectUrl>https://github.com/WalSplitter/covertree-vscode</ProjectUrl>
+    <License>LICENSE</License>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community"    Version="[17.0,18.0)"/>
+    <InstallationTarget Id="Microsoft.VisualStudio.Professional" Version="[17.0,18.0)"/>
+    <InstallationTarget Id="Microsoft.VisualStudio.Enterprise"   Version="[17.0,18.0)"/>
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP"
+                DisplayName=".NET Framework"
+                d:Source="Manual"
+                Version="[4.7.2,)"/>
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage"
+           d:Source="Project"
+           d:ProjectName="%CurrentProject%"
+           Path="|CoverTree.VS;PkgdefProjectOutputGroup|"/>
+    <Asset Type="Microsoft.VisualStudio.MefComponent"
+           d:Source="Project"
+           d:ProjectName="%CurrentProject%"
+           Path="|CoverTree.VS;ComponentFilesProjectOutputGroup|"/>
+  </Assets>
+</PackageManifest>
