@@ -10,12 +10,14 @@
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
+    <!-- WPF support: resolves MC6000 (WindowsBase / PresentationCore / PresentationFramework) -->
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
     <!-- VS SDK — excluded from runtime because VS provides these assemblies -->
     <PackageReference Include="Microsoft.VisualStudio.SDK"        Version="17.6.36"   ExcludeAssets="runtime"/>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools"        Version="17.6.2153" IncludeAssets="build"/>
+    <PackageReference Include="Microsoft.VSSDK.BuildTools"        Version="17.6.2153" PrivateAssets="all"/>
     <!-- JSON parsing — included in output / VSIX -->
     <PackageReference Include="Newtonsoft.Json"                   Version="13.0.3"/>
   </ItemGroup>
@@ -34,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Include="ToolWindow\CoverTreeControl.xaml">
+    <Page Update="ToolWindow\CoverTreeControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
