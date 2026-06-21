@@ -1,0 +1,21 @@
+{
+  "extends": ["config:base", "schedule:weekly"],
+  "semanticCommits": true,
+  "automerge": false,
+  "dependencyDashboard": true,
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "automerge": true
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "assignees": []
+  }
+}

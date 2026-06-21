@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npm install*)",
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git checkout*)",
+      "Bash(git branch*)",
+      "Bash(make *)",
+      "Bash(docker-compose *)",
+      "Bash(node *)",
+      "Bash(npx *)",
+      "Bash(rm -rf apps/*)",
+      "Bash(rm -rf desktop/*)",
+      "Bash(rm -rf tools/*)",
+      "Bash(rm -rf shared/*)",
+      "Bash(rm -rf docs/*)",
+      "Bash(rm -rf .github/prompts*)",
+      "Bash(rm -rf .github/skills*)",
+      "Bash(rm -rf .github/docs*)",
+      "Bash(rm -rf .github/ISSUE_TEMPLATE*)",
+      "Bash(rm -rf .github/PULL_REQUEST_TEMPLATE*)",
+      "Bash(rm -f PROJECT_TYPES.md SETUP.md ARCHITECTURE.md CONTRIBUTING.md SECURITY.md Dockerfile docker-compose.yml renovate.json Makefile)"
+    ],
+    "deny": ["Bash(curl * | bash)", "Bash(wget * | bash)"]
+  }
+}

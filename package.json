@@ -1,0 +1,58 @@
+{
+  "name": "base-project-template",
+  "version": "1.0.0",
+  "description": "Professional, production-ready template for modern applications with best practices and GitHub Copilot optimization",
+  "license": "MIT",
+  "author": "WalSplitter",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WalSplitter/base-project-template"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "desktop/*",
+    "tools/*",
+    "shared/*"
+  ],
+  "scripts": {
+    "install-all": "npm install",
+    "dev": "npm run dev --workspaces",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:watch": "npm run test:watch --workspaces",
+    "test:coverage": "npm run test:coverage --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "lint:fix": "npm run lint:fix --workspaces --if-present",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "clean": "npm run clean --workspaces && npm run clean-root",
+    "clean-root": "rimraf node_modules package-lock.json",
+    "type-check": "npm run type-check --workspaces --if-present",
+    "type-check:watch": "npm run type-check:watch --workspaces",
+    "precommit": "npm run lint && npm run type-check && npm run format:check"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@types/cors": "^2.8.19",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "prettier": "^3.0.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.60.1"
+  },
+  "packageManager": "npm@9.0.0",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "jsdom": "^29.1.1"
+  }
+}
