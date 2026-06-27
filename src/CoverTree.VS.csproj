@@ -14,6 +14,24 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <!--
+    The WPF temp project (_wpftmp.csproj) compiles all source files to produce a temp assembly
+    for XAML type resolution. It resolves packages from NuGet but NOT from the VS installation,
+    so files that depend on VS Text SDK or design assemblies (OleMenuCommandService base type
+    MenuCommandService lives in System.Design which wpftmp does not see) fail to compile.
+    CoverTreeControl.xaml.cs is kept VS-SDK-free intentionally so it compiles here without issue.
+    The six file groups below are excluded from wpftmp — the main project is unaffected.
+  -->
+  <ItemGroup Condition="$(MSBuildProjectName.EndsWith('_wpftmp'))">
+    <Compile Remove="Adornments\*.cs" />
+    <Compile Remove="Commands\*.cs" />
+    <Compile Remove="Coverage\CoverageService.cs" />
+    <Compile Remove="Options\CoverTreeOptionsPage.cs" />
+    <Compile Remove="SolutionExplorer\*.cs" />
+    <Compile Remove="ToolWindow\CoverTreeToolWindow.cs" />
+    <Compile Remove="CoverTreePackage.cs" />
+  </ItemGroup>
+
   <ItemGroup>
     <!-- VS SDK — excluded from runtime because VS provides these assemblies -->
     <PackageReference Include="Microsoft.VisualStudio.SDK"        Version="17.6.36"   ExcludeAssets="runtime"/>

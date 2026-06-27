@@ -17,3 +17,6 @@ project.lock.json
 
 # Logs
 *.log
+
+# Graphify knowledge graph (generated output)
+graphify-out/
