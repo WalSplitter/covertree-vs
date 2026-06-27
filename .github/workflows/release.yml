@@ -7,28 +7,29 @@ on:
 
 jobs:
   release:
-    name: Build, Release & Publish
-    runs-on: ubuntu-latest
+    name: Build & Publish VSIX
+    runs-on: windows-latest
     permissions:
       contents: write
 
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          cache: npm
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
 
-      - run: npm ci
+      - name: Restore NuGet packages
+        run: msbuild src/CoverTree.VS.csproj /t:Restore /p:Configuration=Release
 
-      - run: npm run compile
-
-      - name: Package Extension
-        run: npx vsce package --no-dependencies
+      - name: Build VSIX
+        run: >
+          msbuild src/CoverTree.VS.csproj
+          /p:Configuration=Release
+          /p:DeployExtension=false
+          /m
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: '*.vsix'
+          files: src/bin/Release/**/*.vsix
           generate_release_notes: true
