@@ -9,6 +9,10 @@
       <Group guid="guidCoverTreeCmdSet" id="CoverTreeMenuGroup" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
       </Group>
+      <!-- Group appended to the Solution Explorer item right-click menu -->
+      <Group guid="guidCoverTreeCmdSet" id="CoverTreeSolutionExplorerGroup" priority="0x0800">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+      </Group>
     </Groups>
 
     <Buttons>
@@ -35,6 +39,15 @@
           <ButtonText>CoverTree: Go to Previous Uncovered Line</ButtonText>
         </Strings>
       </Button>
+
+      <!-- Solution Explorer right-click: "Show Coverage" -->
+      <Button guid="guidCoverTreeCmdSet" id="cmdShowCoverage" priority="0x0100" type="Button">
+        <Parent guid="guidCoverTreeCmdSet" id="CoverTreeSolutionExplorerGroup"/>
+        <Strings>
+          <CommandName>CoverTree.ShowCoverage</CommandName>
+          <ButtonText>Show Coverage</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
   </Commands>
 
@@ -48,10 +61,12 @@
   <Symbols>
     <GuidSymbol name="guidCoverTreePackage" value="{9F3A7B2C-D4E5-4F1B-A8C6-3E9F2B4D7A1C}"/>
     <GuidSymbol name="guidCoverTreeCmdSet"  value="{4C8E1F3A-7D2B-4F6A-9B3E-5D1C8F2A4E7B}">
-      <IDSymbol name="CoverTreeMenuGroup" value="0x1020"/>
-      <IDSymbol name="cmdRefresh"         value="0x0100"/>
-      <IDSymbol name="cmdNavigateNext"    value="0x0101"/>
-      <IDSymbol name="cmdNavigatePrev"    value="0x0102"/>
+      <IDSymbol name="CoverTreeMenuGroup"             value="0x1020"/>
+      <IDSymbol name="CoverTreeSolutionExplorerGroup" value="0x1021"/>
+      <IDSymbol name="cmdRefresh"                     value="0x0100"/>
+      <IDSymbol name="cmdNavigateNext"                value="0x0101"/>
+      <IDSymbol name="cmdNavigatePrev"                value="0x0102"/>
+      <IDSymbol name="cmdShowCoverage"                value="0x0103"/>
     </GuidSymbol>
   </Symbols>
 </CommandTable>

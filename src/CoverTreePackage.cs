@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio;
@@ -38,6 +39,7 @@ namespace CoverTree.VS
 
             await Commands.RefreshCoverageCommand.InitializeAsync(this);
             await Commands.NavigateUncoveredCommand.InitializeAsync(this);
+            await Commands.ShowCoverageCommand.InitializeAsync(this);
 
             var solution = await GetServiceAsync(typeof(SVsSolution)) as IVsSolution;
             if (solution != null)
@@ -63,9 +65,41 @@ namespace CoverTree.VS
             JoinableTaskFactory.RunAsync(async () =>
             {
                 await JoinableTaskFactory.SwitchToMainThreadAsync();
+
                 var win = FindToolWindow(typeof(ToolWindow.CoverTreeToolWindow), 0, false) as ToolWindow.CoverTreeToolWindow;
                 win?.Refresh();
-            });
+
+                // Push updated coverage items into open Solution Explorer sources.
+                SolutionExplorer.CoverageCollectionSourceProvider.Current?.NotifyChanged();
+
+                UpdateStatusBar();
+            }).FileAndForget(nameof(OnCoverageChanged));
+        }
+
+        private void UpdateStatusBar()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (GetService(typeof(SVsStatusbar)) is not IVsStatusbar statusbar) return;
+
+            statusbar.IsFrozen(out int frozen);
+            if (frozen != 0) return;
+
+            var all = _coverageService?.GetAllCoverage();
+            if (all == null)
+            {
+                statusbar.SetText("CoverTree: No data");
+                return;
+            }
+
+            var files = all.Where(kv => kv.Key != "total").ToList();
+            if (files.Count == 0)
+            {
+                statusbar.SetText("CoverTree: No files");
+                return;
+            }
+
+            var avg = files.Average(kv => CoverageParser.GetOverallPct(kv.Value));
+            statusbar.SetText($"CoverTree: {avg:F1}% avg ({files.Count} files)");
         }
 
         protected override void Dispose(bool disposing)
