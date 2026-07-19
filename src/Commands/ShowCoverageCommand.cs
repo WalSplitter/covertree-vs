@@ -69,7 +69,7 @@ namespace CoverTree.VS.Commands
         private static void ShowInStatusBar(string text)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var statusbar = CoverTreePackage.Instance?.GetService(typeof(SVsStatusbar)) as IVsStatusbar;
+            var statusbar = ServiceProvider.GlobalProvider.GetService(typeof(SVsStatusbar)) as IVsStatusbar;
             if (statusbar == null) return;
             statusbar.IsFrozen(out int frozen);
             if (frozen == 0) statusbar.SetText(text);
@@ -83,7 +83,7 @@ namespace CoverTree.VS.Commands
             var pkg = CoverTreePackage.Instance;
             if (pkg == null) return null;
 
-            var monSvc = pkg.GetService(typeof(SVsShellMonitorSelection)) as IVsMonitorSelection;
+            var monSvc = ServiceProvider.GlobalProvider.GetService(typeof(SVsShellMonitorSelection)) as IVsMonitorSelection;
             if (monSvc == null) return null;
 
             monSvc.GetCurrentSelection(

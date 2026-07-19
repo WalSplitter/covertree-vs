@@ -1,0 +1,31 @@
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011">
+  <Metadata>
+    <Identity Id="CoverTree.VS.WalSplitter" Version="1.0.0" Language="en-US" Publisher="WalSplitter" />
+    <DisplayName>CoverTree</DisplayName>
+    <Description xml:space="preserve">Code coverage visualization for Jest, Vitest, and NYC. Shows per-file coverage in a tree panel and line-level gutter markers.</Description>
+    <MoreInfo>https://github.com/WalSplitter/covertree-vscode</MoreInfo>
+    <License>LICENSE</License>
+    <Tags>coverage, jest, vitest, nyc, testing, javascript, typescript</Tags>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Id="Microsoft.VisualStudio.Professional" Version="[17.0,)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Id="Microsoft.VisualStudio.Enterprise" Version="[17.0,)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName=".NET Framework" Version="[4.7.2,)" />
+  </Dependencies>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0,)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" Path="CoverTree.VS.pkgdef" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" Path="|CoverTree.VS;ComponentFilesProjectOutputGroup|" />
+  </Assets>
+</PackageManifest>

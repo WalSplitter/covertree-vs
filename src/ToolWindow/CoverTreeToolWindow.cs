@@ -23,12 +23,12 @@ namespace CoverTree.VS.ToolWindow
             var svc = CoverTreePackage.Instance?.CoverageService;
             if (svc != null)
             {
-                svc.DataChanged += (s, e) => _control.Dispatcher.Invoke(RefreshData);
+                svc.DataChanged += (s, e) => _control.Dispatcher.InvokeAsync(RefreshData);
                 RefreshData();
             }
         }
 
-        public void Refresh() => _control?.Dispatcher.Invoke(RefreshData);
+        public void Refresh() => _control?.Dispatcher.InvokeAsync(RefreshData);
 
         private void RefreshData()
         {

@@ -74,10 +74,26 @@ namespace CoverTree.VS.SolutionExplorer
 
         private static string CanonicalName(object item)
         {
-            // In VS Solution Explorer the item is an IVsHierarchyItem.
-            if (item is IVsHierarchyItem hi)
-                return hi.HierarchyIdentity?.CanonicalName;
-            return null;
+            // In VS Solution Explorer the item is an IVsHierarchyItem. Resolve
+            // through the underlying project hierarchy to get the file path.
+            if (item is not IVsHierarchyItem hi) return null;
+            var identity = hi.HierarchyIdentity;
+            if (identity == null) return null;
+
+            var hierarchy = identity.NestedHierarchy ?? identity.Hierarchy;
+            var itemId = identity.IsNestedItem ? identity.NestedItemID : identity.ItemID;
+            if (hierarchy == null) return null;
+
+            // GetRelationships/CreateCollectionSource are called by Solution Explorer's
+            // virtualized tree population, which (especially for Open Folder workspaces)
+            // can happen on a background thread. IVsHierarchy is STA-affine; calling into
+            // it from off the UI thread while the UI thread is itself blocked pumping that
+            // same tree population can deadlock VS. Bail out rather than risk that — the
+            // node just won't get a coverage decoration on this pass.
+            if (!ThreadHelper.CheckAccess()) return null;
+
+            hierarchy.GetCanonicalName(itemId, out var path);
+            return path;
         }
 
         private static readonly string[] WatchedExts =

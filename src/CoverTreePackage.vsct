@@ -13,6 +13,10 @@
       <Group guid="guidCoverTreeCmdSet" id="CoverTreeSolutionExplorerGroup" priority="0x0800">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
       </Group>
+      <!-- View > Other Windows > CoverTree -->
+      <Group guid="guidCoverTreeCmdSet" id="CoverTreeOtherWindowsGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
+      </Group>
     </Groups>
 
     <Buttons>
@@ -48,6 +52,14 @@
           <ButtonText>Show Coverage</ButtonText>
         </Strings>
       </Button>
+
+      <Button guid="guidCoverTreeCmdSet" id="cmdShowToolWindow" priority="0x0100" type="Button">
+        <Parent guid="guidCoverTreeCmdSet" id="CoverTreeOtherWindowsGroup"/>
+        <Strings>
+          <CommandName>CoverTree.ShowToolWindow</CommandName>
+          <ButtonText>CoverTree</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
   </Commands>
 
@@ -63,10 +75,12 @@
     <GuidSymbol name="guidCoverTreeCmdSet"  value="{4C8E1F3A-7D2B-4F6A-9B3E-5D1C8F2A4E7B}">
       <IDSymbol name="CoverTreeMenuGroup"             value="0x1020"/>
       <IDSymbol name="CoverTreeSolutionExplorerGroup" value="0x1021"/>
+      <IDSymbol name="CoverTreeOtherWindowsGroup"     value="0x1022"/>
       <IDSymbol name="cmdRefresh"                     value="0x0100"/>
       <IDSymbol name="cmdNavigateNext"                value="0x0101"/>
       <IDSymbol name="cmdNavigatePrev"                value="0x0102"/>
       <IDSymbol name="cmdShowCoverage"                value="0x0103"/>
+      <IDSymbol name="cmdShowToolWindow"              value="0x0104"/>
     </GuidSymbol>
   </Symbols>
 </CommandTable>

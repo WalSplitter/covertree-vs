@@ -18,6 +18,9 @@ namespace CoverTree.VS
         Window = "3ae79031-e1bc-11d0-8f78-00a0c9110057")]
     [ProvideOptionPage(typeof(CoverTreeOptionsPage), "CoverTree", "General", 0, 0, true)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
+    // Coverage projects (Jest/Vitest/NYC) are typically opened via File > Open Folder rather
+    // than a .sln, which does not raise SolutionExists — load on that context too.
+    [ProvideAutoLoad(VSConstants.UICONTEXT.FolderOpened_string, PackageAutoLoadFlags.BackgroundLoad)]
     public sealed class CoverTreePackage : AsyncPackage
     {
         public const string PackageGuidString = "9F3A7B2C-D4E5-4F1B-A8C6-3E9F2B4D7A1C";
@@ -40,6 +43,7 @@ namespace CoverTree.VS
             await Commands.RefreshCoverageCommand.InitializeAsync(this);
             await Commands.NavigateUncoveredCommand.InitializeAsync(this);
             await Commands.ShowCoverageCommand.InitializeAsync(this);
+            await Commands.ShowToolWindowCommand.InitializeAsync(this);
 
             var solution = await GetServiceAsync(typeof(SVsSolution)) as IVsSolution;
             if (solution != null)
@@ -50,8 +54,11 @@ namespace CoverTree.VS
                     InitCoverageService(solutionDir);
             }
 
-            await ShowToolWindowAsync(typeof(ToolWindow.CoverTreeToolWindow), 0, true, cancellationToken);
+            await ShowCoverTreeToolWindowAsync();
         }
+
+        public async Task ShowCoverTreeToolWindowAsync() =>
+            await ShowToolWindowAsync(typeof(ToolWindow.CoverTreeToolWindow), 0, true, DisposalToken);
 
         public void InitCoverageService(string projectPath)
         {

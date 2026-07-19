@@ -41,9 +41,26 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- MEF attributes ([Export], [ImportingConstructor], ...) and MenuCommandService's
+         base type — not referenced automatically by the SDK-style project, unlike the
+         old-style csproj. -->
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Design" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- source.extension.vsixmanifest's <License>LICENSE</License> needs this present
+         at the project root and packaged into the VSIX. -->
+    <Content Include="..\LICENSE">
+      <Link>LICENSE</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -62,4 +79,58 @@
       <DependentUpon>CoverTreeControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <!--
+    SDK-style projects don't auto-import this, unlike the legacy VSIX project format.
+    Without it, CreateVsixContainer/GeneratePkgDef/DeployVsixExtensionFiles never run,
+    so the build silently produces a plain DLL instead of a deployed extension.
+  -->
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+
+  <!-- Microsoft.VsSDK.targets' GenerateTemplatesManifest needs this set even though this
+       project has no item/project templates. Evaluated at execution time (not during the
+       property-evaluation pass) so $(IntermediateOutputPath) is guaranteed resolved. -->
+  <Target Name="SetTemplateOutputDirectory" BeforeTargets="GenerateTemplatesManifest">
+    <PropertyGroup>
+      <TemplateOutputDirectory Condition="'$(TemplateOutputDirectory)' == ''">$(IntermediateOutputPath)</TemplateOutputDirectory>
+    </PropertyGroup>
+  </Target>
+
+  <!-- Same problem: VsSDK.targets defaults CreatePkgDefAssemblyToProcess to $(TargetPath)
+       at evaluation time, before the SDK has computed TargetPath, so it bakes in empty and
+       GeneratePkgDef's Inputs="" makes MSBuild treat the target as having nothing to do
+       and skip it outright — no pkgdef ever gets produced. -->
+  <Target Name="SetCreatePkgDefAssemblyToProcess" BeforeTargets="GeneratePkgDef">
+    <PropertyGroup>
+      <CreatePkgDefAssemblyToProcess Condition="'$(CreatePkgDefAssemblyToProcess)' == ''">$(TargetPath)</CreatePkgDefAssemblyToProcess>
+    </PropertyGroup>
+  </Target>
+
+  <!--
+    Microsoft.VsSDK.targets calls these legacy "project output group" targets on this
+    project when assembling the VSIX. The SDK-style project doesn't define them (they
+    come from the old non-SDK Microsoft.Common.targets project system); stub them out
+    since this project has no COM components / satellite DLLs / SGen output.
+  -->
+  <Target Name="ComponentFilesProjectOutputGroup" />
+  <Target Name="ComponentFilesProjectOutputGroupDependencies" />
+  <Target Name="SGenFilesOutputGroup" />
+  <Target Name="SatelliteDllsProjectOutputGroup" />
+  <Target Name="DocumentationProjectOutputGroup" />
+
+  <!--
+    The SDK's own Microsoft.Common.CurrentVersion.targets (imported implicitly AFTER all
+    of our content, including the Import above) unconditionally overwrites
+    PrepareForRunDependsOn with just "CopyFilesToOutputDirectory", wiping out the VSIX
+    packaging/deployment chain that Microsoft.VsSDK.targets appended to it. Appending to
+    that property at execution time doesn't help either — a target's DependsOnTargets
+    list is resolved once when the build graph is constructed, before BeforeTargets hooks
+    run, so a later property change can't feed back into it. Instead, hook a plain empty
+    target with a static DependsOnTargets straight onto Build, so pressing F5 in Visual
+    Studio actually packages and deploys the VSIX instead of only compiling the DLL.
+  -->
+  <Target Name="EnsureVsixDeployedOnBuild"
+          AfterTargets="Build"
+          DependsOnTargets="GeneratePkgDef;CopyPkgDef;CreateVsixContainer;DeployVsixExtensionFiles;CopyVsixManifestFile;CopyVsixExtensionFiles" />
+
 </Project>
