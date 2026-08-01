@@ -4,7 +4,7 @@
                  xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
     <Identity Id="CoverTree.VS.WalSplitter"
-              Version="1.0.0"
+              Version="1.0.1"
               Language="en-US"
               Publisher="WalSplitter"/>
     <DisplayName>CoverTree</DisplayName>

@@ -1,6 +1,6 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011">
   <Metadata>
-    <Identity Id="CoverTree.VS.WalSplitter" Version="1.0.0" Language="en-US" Publisher="WalSplitter" />
+    <Identity Id="CoverTree.VS.WalSplitter" Version="1.0.1" Language="en-US" Publisher="WalSplitter" />
     <DisplayName>CoverTree</DisplayName>
     <Description xml:space="preserve">Code coverage visualization for Jest, Vitest, and NYC. Shows per-file coverage in a tree panel and line-level gutter markers.</Description>
     <MoreInfo>https://github.com/WalSplitter/covertree-vs</MoreInfo>
