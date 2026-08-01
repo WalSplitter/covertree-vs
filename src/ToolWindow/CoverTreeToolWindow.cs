@@ -19,16 +19,34 @@ namespace CoverTree.VS.ToolWindow
                 CoverTreePackage.Instance?.CoverageService?.Refresh();
             _control.FileDoubleClicked += OnFileDoubleClicked;
             Content = _control;
+        }
+
+        // The constructor can run on a background thread when VS recreates a
+        // persisted tool window during startup layout restore, before this
+        // package (and CoverTreePackage.Instance) even exists. OnToolWindowCreated
+        // is called later but is guaranteed by VS to run on the UI thread, so all
+        // UI-thread-affine wiring happens here instead of in the constructor.
+        public override void OnToolWindowCreated()
+        {
+            base.OnToolWindowCreated();
+            ThreadHelper.ThrowIfNotOnUIThread();
 
             var svc = CoverTreePackage.Instance?.CoverageService;
             if (svc != null)
             {
-                svc.DataChanged += (s, e) => _control.Dispatcher.InvokeAsync(RefreshData);
+                svc.DataChanged += (s, e) => Refresh();
                 RefreshData();
             }
         }
 
-        public void Refresh() => _control?.Dispatcher.InvokeAsync(RefreshData);
+        public void Refresh()
+        {
+            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                RefreshData();
+            }).FileAndForget(nameof(CoverTreeToolWindow));
+        }
 
         private void RefreshData()
         {

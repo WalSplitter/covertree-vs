@@ -10,10 +10,10 @@ namespace CoverTree.VS.Coverage
 
     public class FileCoverage
     {
-        public CoverageMetric Lines { get; set; }
-        public CoverageMetric Functions { get; set; }
-        public CoverageMetric Statements { get; set; }
-        public CoverageMetric Branches { get; set; }
+        public CoverageMetric Lines { get; set; } = null!;
+        public CoverageMetric Functions { get; set; } = null!;
+        public CoverageMetric Statements { get; set; } = null!;
+        public CoverageMetric Branches { get; set; } = null!;
     }
 
     public enum CoverageStatus { None, Passing, Warning, Failing }

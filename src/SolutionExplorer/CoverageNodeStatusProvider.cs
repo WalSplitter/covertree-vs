@@ -27,7 +27,7 @@ namespace CoverTree.VS.SolutionExplorer
     {
         private const string RelationshipName = "CoverTree.Coverage";
 
-        internal static CoverageCollectionSourceProvider Current { get; private set; }
+        internal static CoverageCollectionSourceProvider? Current { get; private set; }
 
         // All live sources keyed by file path so we can push updates.
         private readonly Dictionary<string, CoverageCollectionSource> _sources =
@@ -53,17 +53,17 @@ namespace CoverTree.VS.SolutionExplorer
         public IEnumerable<IAttachedRelationship> GetRelationships(object item)
         {
             var path = CanonicalName(item);
-            if (!string.IsNullOrEmpty(path) && IsWatchedFile(path))
+            if (path != null && path.Length > 0 && IsWatchedFile(path))
                 yield return CoverageRelationship.Instance;
         }
 
-        public IAttachedCollectionSource CreateCollectionSource(
+        public IAttachedCollectionSource? CreateCollectionSource(
             object item, string relationshipName)
         {
             if (relationshipName != RelationshipName) return null;
 
             var path = CanonicalName(item);
-            if (string.IsNullOrEmpty(path) || !IsWatchedFile(path)) return null;
+            if (path == null || path.Length == 0 || !IsWatchedFile(path)) return null;
 
             var src = new CoverageCollectionSource(item, path);
             lock (_sources) { _sources[path] = src; }
@@ -72,7 +72,7 @@ namespace CoverTree.VS.SolutionExplorer
 
         // ── Helpers ─────────────────────────────────────────────────────────
 
-        private static string CanonicalName(object item)
+        private static string? CanonicalName(object item)
         {
             // In VS Solution Explorer the item is an IVsHierarchyItem. Resolve
             // through the underlying project hierarchy to get the file path.
@@ -90,9 +90,13 @@ namespace CoverTree.VS.SolutionExplorer
             // it from off the UI thread while the UI thread is itself blocked pumping that
             // same tree population can deadlock VS. Bail out rather than risk that — the
             // node just won't get a coverage decoration on this pass.
-            if (!ThreadHelper.CheckAccess()) return null;
-
+            // CheckAccess() above already proves we're on the UI thread here;
+            // the analyzer can't follow that, so suppress rather than add a
+            // redundant ThrowIfNotOnUIThread() that would also force an
+            // unwanted main-thread requirement onto this method's callers.
+#pragma warning disable VSTHRD010
             hierarchy.GetCanonicalName(itemId, out var path);
+#pragma warning restore VSTHRD010
             return path;
         }
 

@@ -25,13 +25,13 @@ namespace CoverTree.VS
     {
         public const string PackageGuidString = "9F3A7B2C-D4E5-4F1B-A8C6-3E9F2B4D7A1C";
 
-        private static CoverTreePackage _instance;
-        public static CoverTreePackage Instance => _instance;
+        private static CoverTreePackage? _instance;
+        public static CoverTreePackage? Instance => _instance;
 
-        private CoverageService _coverageService;
-        public CoverageService CoverageService => _coverageService;
+        private CoverageService? _coverageService;
+        public CoverageService? CoverageService => _coverageService;
 
-        public CoverTreeOptionsPage Options =>
+        public CoverTreeOptionsPage? Options =>
             GetDialogPage(typeof(CoverTreeOptionsPage)) as CoverTreeOptionsPage;
 
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
@@ -54,7 +54,17 @@ namespace CoverTree.VS
                     InitCoverageService(solutionDir);
             }
 
-            await ShowCoverTreeToolWindowAsync();
+            // Showing the tool window synchronously here can deadlock: creating its frame
+            // makes the shell call back into IVsShell5.LoadPackageWithContext, which blocks
+            // (JoinableTask.Join) waiting for this same UI thread — but this thread is still
+            // inside InitializeAsync and never returns to the message loop, so it never
+            // finishes "loading" and the wait never completes. Queuing through Task.Run
+            // forces a real hop off this call stack so InitializeAsync can return first.
+            _ = Task.Run(async () =>
+            {
+                await JoinableTaskFactory.SwitchToMainThreadAsync(DisposalToken);
+                await ShowCoverTreeToolWindowAsync();
+            });
         }
 
         public async Task ShowCoverTreeToolWindowAsync() =>

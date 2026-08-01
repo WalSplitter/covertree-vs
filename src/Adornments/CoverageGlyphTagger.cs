@@ -9,10 +9,10 @@ namespace CoverTree.VS.Adornments
     internal class CoverageGlyphTagger : ITagger<CoverageTag>, IDisposable
     {
         private readonly ITextBuffer _buffer;
-        private readonly string _filePath;
+        private readonly string? _filePath;
         private Dictionary<int, LineCoverageStatus> _lineCoverage = new Dictionary<int, LineCoverageStatus>();
 
-        public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
+        public event EventHandler<SnapshotSpanEventArgs>? TagsChanged;
 
         public CoverageGlyphTagger(ITextBuffer buffer)
         {
@@ -38,9 +38,10 @@ namespace CoverTree.VS.Adornments
 
         private void LoadCoverage()
         {
-            if (string.IsNullOrEmpty(_filePath)) return;
+            var filePath = _filePath;
+            if (filePath == null || filePath.Length == 0) return;
             var svc = CoverTreePackage.Instance?.CoverageService;
-            _lineCoverage = svc?.GetLineCoverage(_filePath) ?? new Dictionary<int, LineCoverageStatus>();
+            _lineCoverage = svc?.GetLineCoverage(filePath) ?? new Dictionary<int, LineCoverageStatus>();
         }
 
         public IEnumerable<ITagSpan<CoverageTag>> GetTags(NormalizedSnapshotSpanCollection spans)

@@ -9,10 +9,10 @@ namespace CoverTree.VS.ToolWindow
         private double _pct;
         private CoverageStatus _status;
 
-        public string Name { get; set; }
-        public string FullPath { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string FullPath { get; set; } = string.Empty;
         public bool IsFolder { get; set; }
-        public FileCoverage CoverageData { get; set; }
+        public FileCoverage? CoverageData { get; set; }
         public ObservableCollection<CoverageFileItem> Children { get; } = new ObservableCollection<CoverageFileItem>();
 
         public double Pct
@@ -55,7 +55,7 @@ namespace CoverTree.VS.ToolWindow
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string n) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
     }
 }

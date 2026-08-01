@@ -8,7 +8,7 @@ namespace CoverTree.VS.Coverage
 {
     public static class CoverageParser
     {
-        public static Dictionary<string, FileCoverage> Parse(string filePath)
+        public static Dictionary<string, FileCoverage>? Parse(string filePath)
         {
             try
             {
@@ -18,14 +18,14 @@ namespace CoverTree.VS.Coverage
             catch { return null; }
         }
 
-        public static FileCoverage GetFileCoverage(Dictionary<string, FileCoverage> summary, string absolutePath)
+        public static FileCoverage? GetFileCoverage(Dictionary<string, FileCoverage>? summary, string absolutePath)
         {
             if (summary == null || string.IsNullOrEmpty(absolutePath)) return null;
 
             var slash = absolutePath.Replace('\\', '/');
             var back = absolutePath.Replace('/', '\\');
 
-            FileCoverage r;
+            FileCoverage? r;
             if (summary.TryGetValue(slash, out r)) return r;
             if (summary.TryGetValue(back, out r)) return r;
             if (summary.TryGetValue(slash.ToUpperInvariant(), out r)) return r;
@@ -35,7 +35,7 @@ namespace CoverTree.VS.Coverage
             return null;
         }
 
-        public static double GetOverallPct(FileCoverage c)
+        public static double GetOverallPct(FileCoverage? c)
         {
             if (c == null) return 0;
             double sum = 0; int count = 0;

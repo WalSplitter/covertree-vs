@@ -10,7 +10,7 @@ namespace CoverTree.VS.Adornments
     [TagType(typeof(CoverageTag))]
     internal class CoverageGlyphTaggerProvider : ITaggerProvider
     {
-        public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag
+        public ITagger<T>? CreateTagger<T>(ITextBuffer buffer) where T : ITag
         {
             return buffer.Properties.GetOrCreateSingletonProperty(
                 () => new CoverageGlyphTagger(buffer)) as ITagger<T>;

@@ -12,12 +12,12 @@ namespace CoverTree.VS.Coverage
     public class CoverageService : IDisposable
     {
         private readonly string _projectPath;
-        private FileSystemWatcher _summaryWatcher;
-        private FileSystemWatcher _detailWatcher;
-        private Dictionary<string, FileCoverage> _summary;
-        private Dictionary<string, JObject> _detail;
+        private FileSystemWatcher? _summaryWatcher;
+        private FileSystemWatcher? _detailWatcher;
+        private Dictionary<string, FileCoverage>? _summary;
+        private Dictionary<string, JObject>? _detail;
 
-        public event EventHandler<CoverageDataChangedEventArgs> DataChanged;
+        public event EventHandler<CoverageDataChangedEventArgs>? DataChanged;
 
         private CoverTreeSettings Settings => CoverTreePackage.Instance?.Options?.ToSettings() ?? new CoverTreeSettings();
 
@@ -34,7 +34,7 @@ namespace CoverTree.VS.Coverage
             _detailWatcher = Watch(GetDetailPath(), OnFileChanged);
         }
 
-        private FileSystemWatcher Watch(string path, FileSystemEventHandler handler)
+        private FileSystemWatcher? Watch(string path, FileSystemEventHandler handler)
         {
             var dir = Path.GetDirectoryName(path);
             var file = Path.GetFileName(path);
@@ -64,9 +64,9 @@ namespace CoverTree.VS.Coverage
             DataChanged?.Invoke(this, new CoverageDataChangedEventArgs());
         }
 
-        public Dictionary<string, FileCoverage> GetAllCoverage() => _summary;
+        public Dictionary<string, FileCoverage>? GetAllCoverage() => _summary;
 
-        public FileCoverage GetFileCoverage(string path) =>
+        public FileCoverage? GetFileCoverage(string path) =>
             CoverageParser.GetFileCoverage(_summary, path);
 
         public Dictionary<int, LineCoverageStatus> GetLineCoverage(string path)

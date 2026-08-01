@@ -34,8 +34,8 @@
 
   <ItemGroup>
     <!-- VS SDK — excluded from runtime because VS provides these assemblies -->
-    <PackageReference Include="Microsoft.VisualStudio.SDK"        Version="17.6.36"   ExcludeAssets="runtime"/>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools"        Version="17.6.2153" PrivateAssets="all"/>
+    <PackageReference Include="Microsoft.VisualStudio.SDK"        Version="17.6.36389" ExcludeAssets="runtime"/>
+    <PackageReference Include="Microsoft.VSSDK.BuildTools"        Version="17.6.2164"  PrivateAssets="all"/>
     <!-- JSON parsing — included in output / VSIX -->
     <PackageReference Include="Newtonsoft.Json"                   Version="13.0.3"/>
   </ItemGroup>

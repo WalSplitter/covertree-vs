@@ -15,7 +15,7 @@ namespace CoverTree.VS.Adornments
 
         private static Brush Freeze(SolidColorBrush b) { b.Freeze(); return b; }
 
-        public UIElement GenerateGlyph(IWpfTextViewLine line, IGlyphTag tag)
+        public UIElement? GenerateGlyph(IWpfTextViewLine line, IGlyphTag tag)
         {
             var ct = tag as CoverageTag;
             if (ct == null) return null;

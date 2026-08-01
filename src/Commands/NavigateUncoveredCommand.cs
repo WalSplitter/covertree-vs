@@ -15,8 +15,8 @@ namespace CoverTree.VS.Commands
 
         private NavigateUncoveredCommand(OleMenuCommandService svc)
         {
-            svc.AddCommand(new MenuCommand((s, e) => Navigate(true),  new CommandID(CommandSet, NextCommandId)));
-            svc.AddCommand(new MenuCommand((s, e) => Navigate(false), new CommandID(CommandSet, PrevCommandId)));
+            svc.AddCommand(new MenuCommand((s, e) => { ThreadHelper.ThrowIfNotOnUIThread(); Navigate(true); },  new CommandID(CommandSet, NextCommandId)));
+            svc.AddCommand(new MenuCommand((s, e) => { ThreadHelper.ThrowIfNotOnUIThread(); Navigate(false); }, new CommandID(CommandSet, PrevCommandId)));
         }
 
         public static async Task InitializeAsync(AsyncPackage package)

@@ -22,7 +22,7 @@ namespace CoverTree.VS.ToolWindow
 
         public string OverallPctDisplay => $"Overall: {_overallPct:F1}%";
 
-        public void Update(Dictionary<string, FileCoverage> summary, string projectRoot, double threshold)
+        public void Update(Dictionary<string, FileCoverage>? summary, string projectRoot, double threshold)
         {
             Items.Clear();
 
@@ -112,7 +112,7 @@ namespace CoverTree.VS.ToolWindow
             return path;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string n) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
     }
 }

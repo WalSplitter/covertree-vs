@@ -7,7 +7,7 @@ namespace CoverTree.VS.Coverage
 {
     public static class DetailParser
     {
-        public static Dictionary<string, JObject> Parse(string filePath)
+        public static Dictionary<string, JObject>? Parse(string filePath)
         {
             try
             {
@@ -17,14 +17,14 @@ namespace CoverTree.VS.Coverage
             catch { return null; }
         }
 
-        public static JObject GetFileCoverage(Dictionary<string, JObject> detail, string absolutePath)
+        public static JObject? GetFileCoverage(Dictionary<string, JObject>? detail, string absolutePath)
         {
             if (detail == null || string.IsNullOrEmpty(absolutePath)) return null;
 
             var slash = absolutePath.Replace('\\', '/');
             var back = absolutePath.Replace('/', '\\');
 
-            JObject r;
+            JObject? r;
             if (detail.TryGetValue(slash, out r)) return r;
             if (detail.TryGetValue(back, out r)) return r;
             if (detail.TryGetValue(slash.ToUpperInvariant(), out r)) return r;
@@ -34,7 +34,7 @@ namespace CoverTree.VS.Coverage
             return null;
         }
 
-        public static Dictionary<int, LineCoverageStatus> GetLineCoverageMap(JObject fc)
+        public static Dictionary<int, LineCoverageStatus> GetLineCoverageMap(JObject? fc)
         {
             var result = new Dictionary<int, LineCoverageStatus>();
             if (fc == null) return result;

@@ -9,8 +9,8 @@ namespace CoverTree.VS.ToolWindow
     {
         private readonly CoverageViewModel _vm;
 
-        internal event EventHandler RefreshRequested;
-        internal event EventHandler<CoverageFileItem> FileDoubleClicked;
+        internal event EventHandler? RefreshRequested;
+        internal event EventHandler<CoverageFileItem>? FileDoubleClicked;
 
         public CoverTreeControl()
         {

@@ -34,6 +34,7 @@ namespace CoverTree.VS.Commands
         // Hide the command when the selected item has no coverage data.
         private void OnBeforeQueryStatus(object sender, EventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             if (sender is OleMenuCommand cmd)
                 cmd.Visible = GetSelectedFilePath() != null;
         }
@@ -77,7 +78,7 @@ namespace CoverTree.VS.Commands
 
         // Returns the absolute path of the single file selected in Solution Explorer,
         // or null when nothing suitable is selected.
-        private string GetSelectedFilePath()
+        private string? GetSelectedFilePath()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             var pkg = CoverTreePackage.Instance;
