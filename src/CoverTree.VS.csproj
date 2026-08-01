@@ -61,6 +61,11 @@
       <Link>LICENSE</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <!-- source.extension.vsixmanifest's <Icon>/<PreviewImage> reference this at
+         "Resources\icon.png", so it needs to be packaged into the VSIX at that path. -->
+    <Content Include="Resources\icon.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
