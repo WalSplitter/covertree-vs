@@ -111,6 +111,21 @@
     </PropertyGroup>
   </Target>
 
+  <!-- Same class of bug again: Microsoft.VsSDK.targets computes TargetVsixContainer
+       (= $(OutDir)$(TargetVsixContainerName)) in a top-level PropertyGroup evaluated
+       before the SDK has resolved $(OutDir) for this TargetFramework, and
+       TargetVsixContainerName is never set at all for SDK-style projects (it comes
+       from a .props file the legacy project system auto-imports that this project
+       doesn't use). Both evaluate empty, so CreateVsixContainer silently writes the
+       package to "<ProjectDir>\.vsix" instead of "<OutDir>\CoverTree.VS.vsix" - no
+       build error, just the wrong file in the wrong place (which is why CI's release
+       asset glob "bin/Release/**/*.vsix" never matched anything). -->
+  <Target Name="SetTargetVsixContainer" BeforeTargets="CreateVsixContainer">
+    <PropertyGroup>
+      <TargetVsixContainer>$(OutDir)$(AssemblyName).vsix</TargetVsixContainer>
+    </PropertyGroup>
+  </Target>
+
   <!--
     Microsoft.VsSDK.targets calls these legacy "project output group" targets on this
     project when assembling the VSIX. The SDK-style project doesn't define them (they
