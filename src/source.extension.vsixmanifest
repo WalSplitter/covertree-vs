@@ -3,10 +3,10 @@
                  xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011"
                  xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="CoverTree.VS.mgrosshauser"
+    <Identity Id="CoverTree.VS.WalSplitter"
               Version="1.0.0"
               Language="en-US"
-              Publisher="mgrosshauser"/>
+              Publisher="WalSplitter"/>
     <DisplayName>CoverTree</DisplayName>
     <Description xml:space="preserve">Code coverage visualization for Jest, Vitest, and NYC. Shows per-file coverage in a tree panel and line-level gutter markers.</Description>
     <MoreInfo>https://github.com/WalSplitter/covertree-vs</MoreInfo>
