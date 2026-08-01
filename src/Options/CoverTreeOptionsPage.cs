@@ -13,13 +13,13 @@ namespace CoverTree.VS.Options
 
         [Category("Files")]
         [DisplayName("Coverage Summary File")]
-        [Description("Path to coverage-summary.json relative to solution root.")]
+        [Description("File name to search for anywhere under the solution (e.g. inside a sub-project's own coverage folder). Only the file name is used, not the folder part.")]
         [DefaultValue("coverage/coverage-summary.json")]
         public string CoverageFile { get; set; } = "coverage/coverage-summary.json";
 
         [Category("Files")]
         [DisplayName("Coverage Detail File")]
-        [Description("Path to coverage-final.json relative to solution root (for gutter markers).")]
+        [Description("File name to search for anywhere under the solution, used for gutter markers. Only the file name is used, not the folder part.")]
         [DefaultValue("coverage/coverage-final.json")]
         public string DetailFile { get; set; } = "coverage/coverage-final.json";
 
