@@ -31,6 +31,8 @@ namespace CoverTree.VS
         private CoverageService? _coverageService;
         public CoverageService? CoverageService => _coverageService;
 
+        public string? ProjectPath { get; private set; }
+
         public CoverTreeOptionsPage? Options =>
             GetDialogPage(typeof(CoverTreeOptionsPage)) as CoverTreeOptionsPage;
 
@@ -72,6 +74,7 @@ namespace CoverTree.VS
 
         public void InitCoverageService(string projectPath)
         {
+            ProjectPath = projectPath;
             _coverageService?.Dispose();
             _coverageService = new CoverageService(projectPath);
             _coverageService.DataChanged += OnCoverageChanged;

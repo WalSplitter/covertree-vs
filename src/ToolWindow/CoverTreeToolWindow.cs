@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using CoverTree.VS.Coverage;
@@ -54,12 +53,14 @@ namespace CoverTree.VS.ToolWindow
             var pkg = CoverTreePackage.Instance;
             if (pkg?.CoverageService == null) return;
 
-            var dte = ServiceProvider.GlobalProvider.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
-            var solutionDir = string.Empty;
-            try { solutionDir = Path.GetDirectoryName(dte?.Solution?.FullName ?? "") ?? ""; }
-            catch { }
+            // pkg.ProjectPath is the root CoverageService actually resolved the coverage
+            // files against (via IVsSolution.GetSolutionInfo, which also covers Open
+            // Folder mode). dte.Solution.FullName is empty for folder-opened projects,
+            // so falling back to it here would leave paths unstripped and show every
+            // filesystem folder level up to the drive root in the tree.
+            var projectRoot = pkg.ProjectPath ?? string.Empty;
 
-            _control.ViewModel.Update(pkg.CoverageService.GetAllCoverage(), solutionDir, pkg.Options?.Threshold ?? 75);
+            _control.ViewModel.Update(pkg.CoverageService.GetAllCoverage(), projectRoot, pkg.Options?.Threshold ?? 75);
         }
 
         private void OnFileDoubleClicked(object sender, CoverageFileItem item)

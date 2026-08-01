@@ -107,8 +107,33 @@ namespace CoverTree.VS.ToolWindow
         {
             path = path.Replace('\\', '/');
             basePath = (basePath ?? "").Replace('\\', '/').TrimEnd('/');
-            if (!string.IsNullOrEmpty(basePath) && path.StartsWith(basePath, StringComparison.OrdinalIgnoreCase))
-                return path.Substring(basePath.Length).TrimStart('/');
+
+            // Cut only the levels ABOVE the workspace root folder, keeping the root
+            // folder itself as the returned path's first segment - Solution Explorer
+            // always shows the opened folder as its own top-level node, and the tree
+            // here should match that 1:1 instead of starting one level lower at "src".
+            var slashIdx = basePath.LastIndexOf('/');
+            var parentPath = slashIdx >= 0 ? basePath.Substring(0, slashIdx) : "";
+            if (!string.IsNullOrEmpty(parentPath) && path.StartsWith(parentPath + "/", StringComparison.OrdinalIgnoreCase))
+                return path.Substring(parentPath.Length).TrimStart('/');
+
+            // Coverage JSON can carry absolute paths recorded on a different machine
+            // or location than where the project currently sits (moved/re-cloned repo,
+            // OneDrive-synced path, CI runner, ...), so the prefix above never matches.
+            // Anchor on the workspace root folder's own name instead - the same name
+            // Solution Explorer shows as the top node - and keep it plus everything
+            // after its rightmost occurrence in the recorded path.
+            var rootName = basePath.Substring(slashIdx + 1);
+            if (!string.IsNullOrEmpty(rootName))
+            {
+                var parts = path.Split('/');
+                for (int i = parts.Length - 2; i >= 0; i--)
+                {
+                    if (string.Equals(parts[i], rootName, StringComparison.OrdinalIgnoreCase))
+                        return string.Join("/", parts, i, parts.Length - i);
+                }
+            }
+
             return path;
         }
 
